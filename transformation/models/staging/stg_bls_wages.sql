@@ -79,7 +79,7 @@ cleaned as (
         -- Extract year from filename (e.g., "mwe-2014.xlsx" -> 2014)
         try_cast(
             regexp_extract(source_file, 'mwe-(\\d{4})', 1) 
-            as integer
+            as varchar
         ) as data_year,
         
         -- Current timestamp for tracking
