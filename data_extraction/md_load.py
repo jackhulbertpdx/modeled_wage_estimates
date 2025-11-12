@@ -7,15 +7,15 @@ con = duckdb.connect('md:')
 parquet_path = '/Users/jackhulbert/Desktop/Data Science Projects/bls_data/data/bls_data_unified.parquet'
 
 con.execute(f"""
-    CREATE OR REPLACE TABLE bls_data_ AS 
+    CREATE OR REPLACE TABLE raw_bls_data AS 
     SELECT * FROM read_parquet('{parquet_path}')
 """)
 
 print("✅ Table created in MotherDuck!")
 
 # Verify
-result = con.execute("SELECT COUNT(*) FROM bls_data").fetchone()
+result = con.execute("SELECT COUNT(*) FROM raw_bls_data").fetchone()
 print(f"Total rows: {result[0]:,}")
 
 # Show sample
-con.execute("SELECT * FROM bls_data LIMIT 5").df()
+con.execute("SELECT * FROM raw_bls_data LIMIT 5").df()

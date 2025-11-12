@@ -1,0 +1,24 @@
+# models/staging/_sources.yml
+version: 2
+
+sources:
+  - name: bls
+    description: Bureau of Labor Statistics wage data
+    database: my_db
+    schema: main
+    tables:
+      - name: bls_data_
+        description: Raw BLS Metropolitan Wage Estimates from 2014-2023
+        columns:
+          - name: series_id
+            description: Unique series identifier
+            tests:
+              - not_null
+          - name: occupation_text
+            description: Occupation title
+          - name: avg_hourly_wage
+            description: Average hourly wage in USD
+          - name: area_code
+            description: Geographic area code
+          - name: data_year
+            description: Year of the wage data

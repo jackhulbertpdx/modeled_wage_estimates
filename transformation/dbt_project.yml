@@ -1,0 +1,26 @@
+# dbt_project.yml
+name: 'transformation'
+version: '1.0.0'
+config-version: 2
+
+profile: 'transformation'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  bls_mwe:
+    staging:
+      +materialized: view
+      +schema: staging  # Will create 'staging' schema
+    marts:
+      +materialized: table
+      +schema: marts    # Will create 'marts' schema

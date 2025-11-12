@@ -1,0 +1,61 @@
+[0m00:57:40.461231 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109cca630>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ae37c50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ae37980>]}
+
+
+============================== 00:57:40.469329 | e40ad189-a52c-42d2-8b06-a376b45e7649 ==============================
+[0m00:57:40.469329 [info ] [MainThread]: Running with dbt=1.10.13
+[0m00:57:40.470418 [debug] [MainThread]: running dbt with arguments {'empty': 'False', 'printer_width': '80', 'target_path': 'None', 'version_check': 'True', 'fail_fast': 'False', 'use_colors': 'True', 'warn_error': 'None', 'log_format': 'default', 'profiles_dir': '/Users/jackhulbert/.dbt', 'send_anonymous_usage_stats': 'True', 'log_cache_events': 'False', 'debug': 'False', 'log_path': 'logs', 'cache_selected_only': 'False', 'indirect_selection': 'eager', 'static_parser': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'introspect': 'True', 'write_json': 'True', 'partial_parse': 'True', 'invocation_command': 'dbt run', 'quiet': 'False'}
+[0m00:57:40.471368 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/jackhulbert/Desktop/Data Science Projects/bls/modeled_wage_estimates/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m00:57:40.513082 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.18193536, "process_in_blocks": "0", "process_kernel_time": 0.375994, "process_mem_max_rss": "97148928", "process_out_blocks": "0", "process_user_time": 2.336535}
+[0m00:57:40.514192 [debug] [MainThread]: Command `dbt run` failed at 00:57:40.513983 after 0.18 seconds
+[0m00:57:40.514881 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a1024e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ae37b60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ae37aa0>]}
+[0m00:57:40.515554 [debug] [MainThread]: Flushing usage events
+[0m00:57:40.859035 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m01:03:34.447897 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11109a3c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111afdc70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111affda0>]}
+
+
+============================== 01:03:34.455000 | 839a326c-e5f2-492f-bc45-5527e7f0aa2f ==============================
+[0m01:03:34.455000 [info ] [MainThread]: Running with dbt=1.10.13
+[0m01:03:34.455988 [debug] [MainThread]: running dbt with arguments {'cache_selected_only': 'False', 'printer_width': '80', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': '/Users/jackhulbert/.dbt', 'log_cache_events': 'False', 'version_check': 'True', 'invocation_command': 'dbt init transformation', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'static_parser': 'True', 'use_experimental_parser': 'False', 'use_colors': 'True', 'log_path': 'logs', 'fail_fast': 'False', 'no_print': 'None', 'introspect': 'True', 'empty': 'None', 'indirect_selection': 'eager', 'log_format': 'default', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'write_json': 'True', 'debug': 'False'}
+[0m01:03:34.484367 [debug] [MainThread]: Starter project path: /Users/jackhulbert/Desktop/Data Science Projects/bls/modeled_wage_estimates/.venv/lib/python3.12/site-packages/dbt/include/starter_project
+[0m01:03:34.500755 [info ] [MainThread]: 
+Your new dbt project "transformation" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m01:03:34.501632 [info ] [MainThread]: Setting up your profile.
+[0m01:03:43.124464 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 8.800277, "process_in_blocks": "0", "process_kernel_time": 0.298737, "process_mem_max_rss": "109539328", "process_out_blocks": "0", "process_user_time": 2.329936}
+[0m01:03:43.125459 [debug] [MainThread]: Command `dbt init` succeeded at 01:03:43.125256 after 8.80 seconds
+[0m01:03:43.126150 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1121f68a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1121c35c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1121c2de0>]}
+[0m01:03:43.126860 [debug] [MainThread]: Flushing usage events
+[0m01:03:43.360696 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m01:15:28.344887 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109aa9bb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a9ee4b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10aa852b0>]}
+
+
+============================== 01:15:28.353234 | 46d133bf-bfc8-4855-8cc3-77ce200f629d ==============================
+[0m01:15:28.353234 [info ] [MainThread]: Running with dbt=1.10.13
+[0m01:15:28.354287 [debug] [MainThread]: running dbt with arguments {'debug': 'False', 'profiles_dir': '/Users/jackhulbert/.dbt', 'printer_width': '80', 'empty': 'None', 'introspect': 'True', 'quiet': 'False', 'log_format': 'default', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'send_anonymous_usage_stats': 'True', 'write_json': 'True', 'static_parser': 'True', 'cache_selected_only': 'False', 'log_cache_events': 'False', 'target_path': 'None', 'log_path': 'logs', 'no_print': 'None', 'fail_fast': 'False', 'invocation_command': 'dbt deps', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'version_check': 'True', 'use_experimental_parser': 'False', 'use_colors': 'True'}
+[0m01:15:28.357018 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/jackhulbert/Desktop/Data Science Projects/bls/modeled_wage_estimates/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m01:15:28.360515 [debug] [MainThread]: Resource report: {"command_name": "deps", "command_success": false, "command_wall_clock_time": 0.1494329, "process_in_blocks": "0", "process_kernel_time": 0.398739, "process_mem_max_rss": "97472512", "process_out_blocks": "0", "process_user_time": 2.356859}
+[0m01:15:28.361511 [debug] [MainThread]: Command `dbt deps` failed at 01:15:28.361312 after 0.15 seconds
+[0m01:15:28.362178 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109187980>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10abdd340>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10abdd520>]}
+[0m01:15:28.362845 [debug] [MainThread]: Flushing usage events
+[0m01:15:28.727202 [debug] [MainThread]: An error was encountered while trying to flush usage events

@@ -1,0 +1,10 @@
+transformation:
+  outputs:
+    dev:
+      type: duckdb
+      path: 'md:'
+      schema: marts
+      threads: 4
+      
+  target: dev
+

@@ -102,11 +102,11 @@ print(f"""
 import duckdb
 con = duckdb.connect('md:')
 con.execute('''
-    CREATE OR REPLACE TABLE bls_data AS 
+    CREATE OR REPLACE TABLE raw_bls_data AS 
     SELECT * FROM read_parquet('{output_parquet}')
 ''')
 print("✅ Loaded to MotherDuck!")
-print(f"Rows: {{con.execute('SELECT COUNT(*) FROM bls_data').fetchone()[0]:,}}")
+print(f"Rows: {{con.execute('SELECT COUNT(*) FROM raw_bls_data').fetchone()[0]:,}}")
 """)
 
 # ---- STEP 6: Save mapping for reference ----
