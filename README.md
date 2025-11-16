@@ -1,4 +1,4 @@
-# BLS Modeled Wage Estimates - Personal Comparison Dashboard
+# BLS Modeled Wage Estimates - Personal Comparison App
 
 A full-stack data pipeline and web application for comparing personal salaries against Bureau of Labor Statistics (BLS) Modeled Wage Estimates data (2014-2023).
 
