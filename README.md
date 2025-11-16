@@ -1,4 +1,4 @@
-# BLS Modeled Wage Estimates - Personal Comparison App
+# BLS Modeled Wage Estimates App
 
 A full-stack data pipeline and web application for comparing personal salaries against Bureau of Labor Statistics (BLS) Modeled Wage Estimates data (2014-2023).
 
@@ -14,8 +14,8 @@ This project provides an end-to-end solution for analyzing BLS wage data, featur
 - Automated data extraction from BLS API
 - Cloud-based data warehouse (MotherDuck/DuckDB)
 - dbt transformation pipeline with staging, intermediate, and mart layers
-- Interactive React web application for personal wage comparison
-- Static deployment to Vercel/Netlify
+- React application for personal wage comparison
+- Static deployment to Vercel
 
 ## Features
 
@@ -35,61 +35,7 @@ This project provides an end-to-end solution for analyzing BLS wage data, featur
 - **Mart layer** - Application-ready tables optimized for specific use cases
 - **Cost of living integration** - Purchasing power calculations (placeholder data)
 
-## Architecture
-
-```
-┌─────────────────────┐
-│   BLS API           │
-│  (Modeled Wage      │
-│   Estimates)        │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Data Extraction    │
-│  (Python)           │
-│  - get_bls_data.py  │
-│  - md_load.py       │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   MotherDuck        │
-│  (Cloud DuckDB)     │
-│  - Raw data table   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   dbt Transform     │
-│  - Staging          │
-│  - Intermediate     │
-│  - Marts            │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   JSON Export       │
-│  (export_data.py)   │
-│  - 910K+ records    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   React Frontend    │
-│  - Vite + TypeScript│
-│  - Tailwind CSS     │
-│  - Recharts         │
-└─────────────────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Vercel/Netlify     │
-│  (Static Hosting)   │
-└─────────────────────┘
-```
-
-## Tech Stack
+## Stack
 
 ### Data Pipeline
 - **Python 3.9+** - Data extraction and processing
@@ -390,16 +336,8 @@ Bureau of Labor Statistics (BLS)
 - Recharts for visualization library
 - MotherDuck for cloud DuckDB hosting
 
-## Support
-
-For issues, questions, or feature requests:
-- Check [`frontend/README.md`](frontend/README.md) for frontend-specific docs
-- Review dbt model documentation in `transformation/models/`
-- Consult BLS documentation: https://www.bls.gov/help/
 
 ---
 
 **Built with**: Python, dbt, DuckDB, React, TypeScript, Tailwind CSS
 **Data**: Bureau of Labor Statistics Modeled Wage Estimates (2014-2023)
-**Author**: Jack Hulbert
-**Last Updated**: November 2025
