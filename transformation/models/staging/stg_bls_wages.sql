@@ -29,6 +29,7 @@ with source_data as (
     from {{ source('bls', 'bls_data_') }}
 ),
 
+
 cleaned as (
     select
         -- Primary key
