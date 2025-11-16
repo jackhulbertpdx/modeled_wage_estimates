@@ -25,7 +25,7 @@ with source_data as (
         cast(relative_standard_error as varchar) as relative_standard_error,
         cast(avg_hourly_wage_footnote as varchar) as avg_hourly_wage_footnote,
         cast(relative_standard_error_footnote as varchar) as relative_standard_error_footnote,
-        cast(source_file as varchar) as source_file 
+        cast(source_file as varchar) as source_file
     from {{ source('bls', 'bls_data_') }}
 ),
 
@@ -76,12 +76,9 @@ cleaned as (
         
         -- Source tracking
         nullif(trim(source_file), '') as source_file,
-        
+
         -- Extract year from filename (e.g., "mwe-2014.xlsx" -> 2014)
-        try_cast(
-            regexp_extract(source_file, 'mwe-(\\d{4})', 1) 
-            as varchar
-        ) as data_year,
+        substring(source_file, 5, 4) as data_year,
         
         -- Current timestamp for tracking
         current_timestamp as loaded_at

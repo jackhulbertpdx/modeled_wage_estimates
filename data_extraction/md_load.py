@@ -1,10 +1,12 @@
 import duckdb
+import os
 
 # Connect to MotherDuck (will prompt for token first time)
 con = duckdb.connect('md:')
 
-# Load parquet and create table
-parquet_path = '/Users/jackhulbert/Desktop/Data Science Projects/bls_data/data/bls_data_unified.parquet'
+# Get project root directory (parent of data_extraction/)
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+parquet_path = os.path.join(project_root, "data", "bls_data_unified.parquet")
 
 con.execute(f"""
     CREATE OR REPLACE TABLE raw_bls_data AS 

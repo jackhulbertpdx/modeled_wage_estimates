@@ -2,3 +2,13 @@
 venv/
 *.pyc
 __pycache__/.venv/
+claude.md
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/public/data/*.json
+
+# Data files
+data/*.parquet
+data/*.csv

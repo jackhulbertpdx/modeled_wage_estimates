@@ -3,7 +3,9 @@ import pandas as pd
 import json
 
 # ---- CONFIG ----
-data_dir = "/Users/jackhulbert/Desktop/Data Science Projects/bls_data/data"
+# Get project root directory (parent of data_extraction/)
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_dir = os.path.join(project_root, "data")
 output_parquet = os.path.join(data_dir, "bls_data_unified.parquet")
 
 # ---- COLUMN MAPPING ----
