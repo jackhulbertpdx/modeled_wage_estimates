@@ -4,6 +4,11 @@ venv/
 __pycache__/.venv/
 claude.md
 
+# Environment variables (NEVER commit secrets!)
+.env
+.env.*
+!.env.example
+
 # Frontend
 frontend/node_modules/
 frontend/dist/
