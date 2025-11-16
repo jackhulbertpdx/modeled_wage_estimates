@@ -25,7 +25,7 @@ with source_data as (
         cast(relative_standard_error as varchar) as relative_standard_error,
         cast(avg_hourly_wage_footnote as varchar) as avg_hourly_wage_footnote,
         cast(relative_standard_error_footnote as varchar) as relative_standard_error_footnote,
-        cast(source_file as varchar) as source_file
+        cast(source_file as varchar) as source_file 
     from {{ source('bls', 'bls_data_') }}
 ),
 
