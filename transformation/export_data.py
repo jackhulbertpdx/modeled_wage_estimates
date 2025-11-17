@@ -6,11 +6,16 @@ This script queries MotherDuck and exports data to JSON files that can be served
 import duckdb
 import json
 import os
+import numpy as np
 from pathlib import Path
 
 # Output directory for JSON files
 OUTPUT_DIR = Path(__file__).parent.parent / "frontend" / "public" / "data"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+def clean_dataframe_for_json(df):
+    """Replace NaN, inf, and -inf with None for valid JSON"""
+    return df.replace([np.nan, np.inf, -np.inf], None)
 
 print("🦆 Connecting to MotherDuck...")
 con = duckdb.connect('md:')
@@ -27,7 +32,7 @@ occupations = con.execute("""
 """).fetchdf()
 
 with open(OUTPUT_DIR / "occupations.json", 'w') as f:
-    json.dump(occupations.to_dict('records'), f, indent=2)
+    json.dump(clean_dataframe_for_json(occupations).to_dict('records'), f, indent=2)
 print(f"   ✓ Exported {len(occupations)} occupations")
 
 # ===== Export Area List =====
@@ -44,7 +49,7 @@ areas = con.execute("""
 """).fetchdf()
 
 with open(OUTPUT_DIR / "areas.json", 'w') as f:
-    json.dump(areas.to_dict('records'), f, indent=2)
+    json.dump(clean_dataframe_for_json(areas).to_dict('records'), f, indent=2)
 print(f"   ✓ Exported {len(areas)} areas")
 
 # ===== Export Latest Year Summary (for quick lookups) =====
@@ -75,7 +80,7 @@ for area_type in ['National', 'State', 'Metropolitan']:
     subset = latest_summary[latest_summary['area_type'] == area_type]
     filename = f"wages_latest_{area_type.lower()}.json"
     with open(OUTPUT_DIR / filename, 'w') as f:
-        json.dump(subset.to_dict('records'), f)
+        json.dump(clean_dataframe_for_json(subset).to_dict('records'), f)
     print(f"   ✓ Exported {len(subset)} {area_type} wage records")
 
 # ===== Export Time Series Data (sample for top occupations) =====
@@ -106,7 +111,7 @@ time_series = con.execute("""
 """).fetchdf()
 
 with open(OUTPUT_DIR / "time_series_national.json", 'w') as f:
-    json.dump(time_series.to_dict('records'), f)
+    json.dump(clean_dataframe_for_json(time_series).to_dict('records'), f)
 print(f"   ✓ Exported {len(time_series)} time series records")
 
 # ===== Export Geographic Comparison Data =====
@@ -133,7 +138,7 @@ geo_comparison = con.execute("""
 """).fetchdf()
 
 with open(OUTPUT_DIR / "geographic_comparison.json", 'w') as f:
-    json.dump(geo_comparison.to_dict('records'), f)
+    json.dump(clean_dataframe_for_json(geo_comparison).to_dict('records'), f)
 print(f"   ✓ Exported {len(geo_comparison)} geographic comparison records")
 
 # ===== Export Metadata =====
