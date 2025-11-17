@@ -6,6 +6,7 @@ import type { Occupation, Area, WageData } from '../types'
 const WageComparison = () => {
   const [occupations, setOccupations] = useState<Occupation[]>([])
   const [areas, setAreas] = useState<Area[]>([])
+  const [availabilityMap, setAvailabilityMap] = useState<Record<string, string[]>>({})
   const [loading, setLoading] = useState(true)
   const [results, setResults] = useState<WageData | null>(null)
 
@@ -13,13 +14,15 @@ const WageComparison = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [occupationsRes, areasRes] = await Promise.all([
+        const [occupationsRes, areasRes, mappingRes] = await Promise.all([
           fetch('/data/occupations.json'),
-          fetch('/data/areas.json')
+          fetch('/data/areas.json'),
+          fetch('/data/occupation_area_mapping.json')
         ])
 
         const occupationsData = await occupationsRes.json()
         const areasData = await areasRes.json()
+        const mappingData = await mappingRes.json()
 
         // Deduplicate occupations by occupation_code
         const uniqueOccupations = Array.from(
@@ -33,6 +36,7 @@ const WageComparison = () => {
 
         setOccupations(uniqueOccupations)
         setAreas(uniqueAreas)
+        setAvailabilityMap(mappingData)
       } catch (error) {
         console.error('Error loading data:', error)
       } finally {
@@ -137,6 +141,7 @@ const WageComparison = () => {
         <WageForm
           occupations={occupations}
           areas={areas}
+          availabilityMap={availabilityMap}
           onSubmit={handleCompare}
           loading={loading}
         />

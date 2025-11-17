@@ -141,6 +141,27 @@ with open(OUTPUT_DIR / "geographic_comparison.json", 'w') as f:
     json.dump(clean_dataframe_for_json(geo_comparison).to_dict('records'), f)
 print(f"   ✓ Exported {len(geo_comparison)} geographic comparison records")
 
+# ===== Export Occupation-Area Availability Mapping =====
+print("🔗 Exporting occupation-area availability mapping...")
+availability = con.execute("""
+    SELECT
+        occupation_code,
+        array_agg(DISTINCT area_code) as available_areas
+    FROM my_db.marts_marts.mart_personal_comparison
+    WHERE is_latest_year = true
+    GROUP BY occupation_code
+""").fetchdf()
+
+# Convert to dict for easier lookup
+availability_map = {}
+for _, row in availability.iterrows():
+    # Convert numpy array to Python list for JSON serialization
+    availability_map[row['occupation_code']] = row['available_areas'].tolist() if hasattr(row['available_areas'], 'tolist') else list(row['available_areas'])
+
+with open(OUTPUT_DIR / "occupation_area_mapping.json", 'w') as f:
+    json.dump(availability_map, f)
+print(f"   ✓ Exported availability mapping for {len(availability_map)} occupations")
+
 # ===== Export Metadata =====
 print("ℹ️  Exporting metadata...")
 metadata = {
