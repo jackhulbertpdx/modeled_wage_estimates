@@ -53,7 +53,7 @@ with open(OUTPUT_DIR / "areas.json", 'w') as f:
 print(f"   ✓ Exported {len(areas)} areas")
 
 # ===== Export Latest Year Summary (for quick lookups) =====
-print("💰 Exporting latest year wage summary...")
+print("💰 Exporting latest year wage summary (high quality only)...")
 latest_summary = con.execute("""
     SELECT
         occupation_code,
@@ -69,11 +69,14 @@ latest_summary = con.execute("""
         mean_annual_wage,
         avg_10yr_growth_pct,
         trend_classification,
-        data_reliability
+        data_reliability,
+        wage_observation_count
     FROM my_db.marts_marts.mart_personal_comparison
     WHERE is_latest_year = true
+        AND wage_observation_count >= 10  -- Filter for statistical reliability
     ORDER BY occupation_code, area_code
 """).fetchdf()
+print(f"   ℹ️  Filtered to {len(latest_summary)} records with 10+ observations (from 1.6M total)")
 
 # Split by area type for better performance
 for area_type in ['National', 'State', 'Metropolitan']:
@@ -89,7 +92,9 @@ time_series = con.execute("""
     WITH top_occupations AS (
         SELECT DISTINCT occupation_code
         FROM my_db.marts_marts.mart_personal_comparison
-        WHERE is_latest_year = true AND area_type = 'National'
+        WHERE is_latest_year = true
+            AND area_type = 'National'
+            AND wage_observation_count >= 10
         ORDER BY p50_annual_wage DESC
         LIMIT 100
     )
@@ -107,6 +112,7 @@ time_series = con.execute("""
     FROM my_db.marts_marts.mart_personal_comparison ts
     INNER JOIN top_occupations t ON ts.occupation_code = t.occupation_code
     WHERE ts.area_type = 'National'
+        AND ts.wage_observation_count >= 10
     ORDER BY ts.occupation_code, ts.data_year
 """).fetchdf()
 
@@ -149,6 +155,7 @@ availability = con.execute("""
         array_agg(DISTINCT area_code) as available_areas
     FROM my_db.marts_marts.mart_personal_comparison
     WHERE is_latest_year = true
+        AND wage_observation_count >= 10
     GROUP BY occupation_code
 """).fetchdf()
 

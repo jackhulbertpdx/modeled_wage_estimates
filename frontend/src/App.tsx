@@ -13,7 +13,10 @@ function App() {
                 BLS Wage Comparison Tool
               </h1>
               <p className="mt-1 text-sm text-gray-500">
-                Compare your salary to market data from the Bureau of Labor Statistics (2014-2023)
+                High-quality wage data from the Bureau of Labor Statistics (2014-2023)
+              </p>
+              <p className="mt-1 text-xs text-blue-600 font-medium">
+                ✓ Filtered for statistical reliability (10+ wage observations)
               </p>
             </div>
             <div className="text-right">
@@ -34,6 +37,9 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-gray-500">
             Built with Bureau of Labor Statistics data • Updated through 2023
+          </p>
+          <p className="text-center text-xs text-gray-400 mt-1">
+            Showing only high-quality data with 10+ wage observations for statistical reliability
           </p>
         </div>
       </footer>
