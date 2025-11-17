@@ -21,36 +21,50 @@ print("🦆 Connecting to MotherDuck...")
 con = duckdb.connect('md:')
 
 # ===== Export Occupation List =====
-print("📊 Exporting occupation list...")
+print("📊 Exporting occupation list (with high-quality data only)...")
 occupations = con.execute("""
     SELECT DISTINCT
-        occupation_code,
-        occupation_text,
-        major_occupation_group
-    FROM my_db.marts_marts.dim_occupations
+        dim_occ.occupation_code,
+        dim_occ.occupation_text,
+        dim_occ.major_occupation_group
+    FROM my_db.marts_marts.dim_occupations dim_occ
+    WHERE EXISTS (
+        SELECT 1
+        FROM my_db.marts_marts.mart_personal_comparison mpc
+        WHERE mpc.occupation_code = dim_occ.occupation_code
+            AND mpc.is_latest_year = true
+            AND mpc.wage_observation_count >= 10
+    )
     ORDER BY occupation_text
 """).fetchdf()
 
 with open(OUTPUT_DIR / "occupations.json", 'w') as f:
     json.dump(clean_dataframe_for_json(occupations).to_dict('records'), f, indent=2)
-print(f"   ✓ Exported {len(occupations)} occupations")
+print(f"   ✓ Exported {len(occupations)} occupations (filtered for data availability)")
 
 # ===== Export Area List =====
-print("📍 Exporting area list...")
+print("📍 Exporting area list (with high-quality data only)...")
 areas = con.execute("""
     SELECT DISTINCT
-        area_code,
-        area_text,
-        area_type,
-        state_code
-    FROM my_db.marts_marts.dim_areas
-    WHERE area_type IN ('National', 'State', 'Metropolitan')
+        dim_area.area_code,
+        dim_area.area_text,
+        dim_area.area_type,
+        dim_area.state_code
+    FROM my_db.marts_marts.dim_areas dim_area
+    WHERE dim_area.area_type IN ('National', 'State', 'Metropolitan')
+        AND EXISTS (
+            SELECT 1
+            FROM my_db.marts_marts.mart_personal_comparison mpc
+            WHERE mpc.area_code = dim_area.area_code
+                AND mpc.is_latest_year = true
+                AND mpc.wage_observation_count >= 10
+        )
     ORDER BY area_type, area_text
 """).fetchdf()
 
 with open(OUTPUT_DIR / "areas.json", 'w') as f:
     json.dump(clean_dataframe_for_json(areas).to_dict('records'), f, indent=2)
-print(f"   ✓ Exported {len(areas)} areas")
+print(f"   ✓ Exported {len(areas)} areas (filtered for data availability)")
 
 # ===== Export Latest Year Summary (for quick lookups) =====
 print("💰 Exporting latest year wage summary (high quality only)...")
