@@ -36,8 +36,22 @@ const WageComparison = () => {
   const handleCompare = async (occupationCode: string, salary: number, areaCode: string) => {
     setLoading(true)
     try {
+      // Determine which data file to load based on area code
+      const area = areas.find(a => a.area_code === areaCode)
+      let wageDataFile = '/data/wages_latest_national.json'
+
+      if (area) {
+        if (area.area_type === 'State') {
+          wageDataFile = '/data/wages_latest_state.json'
+        } else if (area.area_type === 'Metropolitan' || area.area_type === 'Metropolitan Division') {
+          wageDataFile = '/data/wages_latest_metropolitan.json'
+        }
+      }
+
+      console.log(`Loading ${wageDataFile} for area ${areaCode} (${area?.area_type})`)
+
       // Load wage data for the selected occupation and area
-      const wageDataRes = await fetch('/data/wages_latest_national.json')
+      const wageDataRes = await fetch(wageDataFile)
       const timeSeriesRes = await fetch('/data/time_series_national.json')
 
       const wageData = await wageDataRes.json()
@@ -48,9 +62,9 @@ const WageComparison = () => {
         w.occupation_code === occupationCode && w.area_code === areaCode
       )
 
-      // Find time series for this occupation
+      // Find time series for this occupation (national data only for now)
       const occupationTimeSeries = timeSeriesData.filter((t: any) =>
-        t.occupation_code === occupationCode
+        t.occupation_code === occupationCode && t.area_code === '0000000'
       )
 
       if (wageRecord) {
@@ -68,9 +82,13 @@ const WageComparison = () => {
           userPercentile: percentile,
           timeSeries: occupationTimeSeries
         })
+      } else {
+        alert(`No wage data found for this occupation in ${area?.area_text || 'this area'}. Try selecting a different location or occupation.`)
+        setResults(null)
       }
     } catch (error) {
       console.error('Error fetching wage data:', error)
+      alert('Error loading wage data. Please try again.')
     } finally {
       setLoading(false)
     }
