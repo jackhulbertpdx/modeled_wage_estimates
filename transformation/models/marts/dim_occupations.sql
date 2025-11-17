@@ -8,11 +8,13 @@
 }}
 
 with unique_occupations as (
-    select distinct
+    select
         occupation_code,
-        occupation_text
+        -- Take the most common occupation_text for each code
+        mode(occupation_text) as occupation_text
     from {{ ref('stg_bls_wages') }}
     where occupation_code is not null
+    group by occupation_code
 ),
 
 enhanced as (

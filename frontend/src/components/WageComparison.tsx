@@ -21,8 +21,18 @@ const WageComparison = () => {
         const occupationsData = await occupationsRes.json()
         const areasData = await areasRes.json()
 
-        setOccupations(occupationsData)
-        setAreas(areasData)
+        // Deduplicate occupations by occupation_code
+        const uniqueOccupations = Array.from(
+          new Map(occupationsData.map((occ: Occupation) => [occ.occupation_code, occ])).values()
+        )
+
+        // Deduplicate areas by area_code
+        const uniqueAreas = Array.from(
+          new Map(areasData.map((area: Area) => [area.area_code, area])).values()
+        )
+
+        setOccupations(uniqueOccupations)
+        setAreas(uniqueAreas)
       } catch (error) {
         console.error('Error loading data:', error)
       } finally {
