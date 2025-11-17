@@ -80,10 +80,12 @@ const WageResults = ({ data }: WageResultsProps) => {
         <div className="card">
           <h3 className="text-sm font-medium text-gray-600 mb-1">10-Year Avg Growth</h3>
           <p className="text-3xl font-bold text-gray-900">
-            {data.avg_10yr_growth_pct.toFixed(1)}%
+            {data.avg_10yr_growth_pct !== null && data.avg_10yr_growth_pct !== undefined
+              ? `${data.avg_10yr_growth_pct.toFixed(1)}%`
+              : 'N/A'}
           </p>
           <p className="text-sm text-gray-600 mt-2">
-            {data.trend_classification}
+            {data.trend_classification || 'Data unavailable'}
           </p>
         </div>
       </div>
