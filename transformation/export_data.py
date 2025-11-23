@@ -33,7 +33,7 @@ occupations = con.execute("""
         FROM my_db.marts_marts.mart_personal_comparison mpc
         WHERE mpc.occupation_code = dim_occ.occupation_code
             AND mpc.is_latest_year = true
-            AND mpc.wage_observation_count >= 10
+            AND mpc.wage_observation_count >= 3
     )
     ORDER BY occupation_text
 """).fetchdf()
@@ -57,7 +57,7 @@ areas = con.execute("""
             FROM my_db.marts_marts.mart_personal_comparison mpc
             WHERE mpc.area_code = dim_area.area_code
                 AND mpc.is_latest_year = true
-                AND mpc.wage_observation_count >= 10
+                AND mpc.wage_observation_count >= 3
         )
     ORDER BY area_type, area_text
 """).fetchdf()
@@ -87,10 +87,10 @@ latest_summary = con.execute("""
         wage_observation_count
     FROM my_db.marts_marts.mart_personal_comparison
     WHERE is_latest_year = true
-        AND wage_observation_count >= 10  -- Filter for statistical reliability
+        AND wage_observation_count >= 3  -- Filter for statistical reliability
     ORDER BY occupation_code, area_code
 """).fetchdf()
-print(f"   ℹ️  Filtered to {len(latest_summary)} records with 10+ observations (from 1.6M total)")
+print(f"   ℹ️  Filtered to {len(latest_summary)} records with 3+ observations (from 1.6M total)")
 
 # Split by area type for better performance
 for area_type in ['National', 'State', 'Metropolitan']:
@@ -108,7 +108,7 @@ time_series = con.execute("""
         FROM my_db.marts_marts.mart_personal_comparison
         WHERE is_latest_year = true
             AND area_type = 'National'
-            AND wage_observation_count >= 10
+            AND wage_observation_count >= 3
         ORDER BY p50_annual_wage DESC
         LIMIT 100
     )
@@ -126,7 +126,7 @@ time_series = con.execute("""
     FROM my_db.marts_marts.mart_personal_comparison ts
     INNER JOIN top_occupations t ON ts.occupation_code = t.occupation_code
     WHERE ts.area_type = 'National'
-        AND ts.wage_observation_count >= 10
+        AND ts.wage_observation_count >= 3
     ORDER BY ts.occupation_code, ts.data_year
 """).fetchdf()
 
@@ -153,7 +153,7 @@ geo_comparison = con.execute("""
         data_reliability
     FROM my_db.marts_marts.mart_geographic_comparison
     WHERE area_type = 'Metropolitan'
-        AND wage_observation_count >= 10
+        AND wage_observation_count >= 3
     ORDER BY occupation_code, wage_rank_nominal
 """).fetchdf()
 
@@ -169,7 +169,7 @@ availability = con.execute("""
         array_agg(DISTINCT area_code) as available_areas
     FROM my_db.marts_marts.mart_personal_comparison
     WHERE is_latest_year = true
-        AND wage_observation_count >= 10
+        AND wage_observation_count >= 3
     GROUP BY occupation_code
 """).fetchdf()
 

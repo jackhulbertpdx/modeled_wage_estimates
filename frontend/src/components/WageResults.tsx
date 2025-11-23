@@ -6,8 +6,8 @@ interface WageResultsProps {
 }
 
 const WageResults = ({ data }: WageResultsProps) => {
-  const diffFromMedian = data.userSalary - data.p50_annual_wage
-  const diffPct = ((diffFromMedian / data.p50_annual_wage) * 100).toFixed(1)
+  const diffFromMedian = data.userSalary - data.median_wage
+  const diffPct = ((diffFromMedian / data.median_wage) * 100).toFixed(1)
 
   // Format currency
   const formatCurrency = (value: number) => {
@@ -24,7 +24,7 @@ const WageResults = ({ data }: WageResultsProps) => {
     .map(point => ({
       year: point.data_year,
       '25th Percentile': point.p25_annual_wage,
-      'Median': point.p50_annual_wage,
+      'Median': point.median_wage,
       '75th Percentile': point.p75_annual_wage,
       'Your Salary': data.userSalary
     }))
@@ -58,7 +58,7 @@ const WageResults = ({ data }: WageResultsProps) => {
         <div className="card">
           <h3 className="text-sm font-medium text-gray-600 mb-1">Market Median</h3>
           <p className="text-3xl font-bold text-gray-900">
-            {formatCurrency(data.p50_annual_wage)}
+            {formatCurrency(data.median_wage)}
           </p>
           <p className="text-sm text-gray-600 mt-2">
             50th percentile for this occupation
@@ -95,12 +95,12 @@ const WageResults = ({ data }: WageResultsProps) => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Position in the Wage Distribution</h3>
         <div className="relative pt-4 pb-8">
           {/* Wage Range Bar */}
-          <div className="relative h-12 bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600 rounded-lg">
-            {/* User Position Marker */}
+          <div className="relative h-12 bg-gradient-to-r from-blue-200 via-blue-400 to-blue-600 rounded-lg overflow-visible">
+            {/* User Position Marker - Fixed to handle values below p25 and above p75 */}
             <div
-              className="absolute top-0 bottom-0 w-1 bg-red-500 shadow-lg"
+              className="absolute top-0 bottom-0 w-1 bg-red-500 shadow-lg z-10"
               style={{
-                left: `${data.userPercentile}%`,
+                left: `${Math.max(0, Math.min(100, data.userPercentile))}%`,
                 transform: 'translateX(-50%)'
               }}
             >
@@ -108,6 +108,21 @@ const WageResults = ({ data }: WageResultsProps) => {
                 You: {formatCurrency(data.userSalary)}
               </div>
             </div>
+            {/* Show indicator if salary is out of bounds */}
+            {data.userSalary < data.p25_annual_wage && (
+              <div className="absolute -left-2 top-0 bottom-0 flex items-center">
+                <div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                  ← Below 25th
+                </div>
+              </div>
+            )}
+            {data.userSalary > data.p75_annual_wage && (
+              <div className="absolute -right-2 top-0 bottom-0 flex items-center">
+                <div className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                  Above 75th →
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Labels */}
@@ -118,7 +133,7 @@ const WageResults = ({ data }: WageResultsProps) => {
             </div>
             <div className="text-center">
               <div className="font-medium">50th (Median)</div>
-              <div className="text-gray-600">{formatCurrency(data.p50_annual_wage)}</div>
+              <div className="text-gray-600">{formatCurrency(data.median_wage)}</div>
             </div>
             <div className="text-right">
               <div className="font-medium">75th</div>
@@ -135,15 +150,16 @@ const WageResults = ({ data }: WageResultsProps) => {
             Wage Trends Over Time (2014-2023)
           </h3>
           <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={chartData}>
+            <LineChart data={chartData} style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`} />
+              <XAxis dataKey="year" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }} />
+              <YAxis tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`} style={{ fontFamily: 'IBM Plex Sans, sans-serif' }} />
               <Tooltip
                 formatter={(value: number) => formatCurrency(value)}
                 labelFormatter={(label) => `Year: ${label}`}
+                contentStyle={{ fontFamily: 'IBM Plex Sans, sans-serif' }}
               />
-              <Legend />
+              <Legend wrapperStyle={{ fontFamily: 'IBM Plex Sans, sans-serif' }} />
               <Line
                 type="monotone"
                 dataKey="25th Percentile"
@@ -170,7 +186,7 @@ const WageResults = ({ data }: WageResultsProps) => {
                 stroke="#ef4444"
                 strokeWidth={2}
                 strokeDasharray="5 5"
-                label={{ value: 'Your Salary', position: 'right', fill: '#ef4444', fontWeight: 'bold' }}
+                label={{ value: 'Your Salary', position: 'right', fill: '#ef4444', fontWeight: 'bold', fontFamily: 'IBM Plex Sans, sans-serif' }}
               />
             </LineChart>
           </ResponsiveContainer>
