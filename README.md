@@ -1,55 +1,22 @@
-# BLS Modeled Wage Estimates App
+# BLS Modeled Wage Estimates 
 
-A full-stack data pipeline and web application for comparing personal salaries against Bureau of Labor Statistics (BLS) Modeled Wage Estimates data (2014-2023).
-
-![Tech Stack](https://img.shields.io/badge/dbt-FF694B?style=flat&logo=dbt&logoColor=white)
-![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=flat&logo=duckdb&logoColor=black)
-![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+A web application for comparing earnings against Bureau of Labor Statistics (BLS) Modeled Wage Estimates data (2014-2023).
 
 ## Overview
 
-This project provides an end-to-end solution for analyzing BLS wage data, featuring:
-- Automated data extraction from BLS API
-- Cloud-based data warehouse (MotherDuck/DuckDB)
-- dbt transformation pipeline with staging, intermediate, and mart layers
-- React application for personal wage comparison
-- Static deployment to Vercel
+This project provides an end-to-end solution for analyzing BLS MWE data, featuring:
+- Automated data extraction from BLS 
+- Data storage (MotherDuck)
+- Transformation staging, intermediate, and mart layers (dbt)
+- React app front-end for personal wage comparison
 
 ## Features
 
 ### Personal Wage Comparison Dashboard
 - **Search 1,300+ occupations** - Searchable dropdown with filter
 - **Compare your salary** - See where you rank in the wage distribution
-- **Geographic analysis** - National, state, and metropolitan area comparisons
 - **Historical trends** - 10-year time series (2014-2023) with growth rates
-- **Interactive visualizations** - Percentile positions, trend charts using Recharts
 - **Data quality indicators** - Reliability ratings and observation counts
-
-### Data Pipeline
-- **Automated extraction** - Python scripts to fetch latest BLS data
-- **dbt transformations** - Modular SQL models with data quality tests
-- **Staging layer** - Cleaned and standardized source data
-- **Intermediate layer** - Percentile calculations, growth rates, time series
-- **Mart layer** - Application-ready tables optimized for specific use cases
-- **Cost of living integration** - Purchasing power calculations (placeholder data)
-
-## Stack
-
-### Data Pipeline
-- **Python 3.9+** - Data extraction and processing
-- **DuckDB/MotherDuck** - Cloud-based analytical database
-- **dbt (data build tool)** - SQL transformations and data modeling
-- **Pandas** - Data manipulation
-
-### Frontend
-- **React 18** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Utility-first styling
-- **Recharts** - React charting library
-- **Vercel** - Deployment platform
 
 ## Project Structure
 
@@ -97,11 +64,11 @@ modeled_wage_estimates/
 
 ## Quick Start
 
-### Prerequisites
+### Prereqs
 
 - Python 3.9+
 - Node.js 20.17+
-- MotherDuck account (or local DuckDB)
+- MotherDuck (or local DuckDB)
 - npm or yarn
 
 ### 1. Data Extraction
@@ -135,7 +102,7 @@ dbt run     # Run all models
 dbt test    # Run data quality tests
 ```
 
-### 3. Export Data
+### 3. Export for front-end files (JSON)
 
 ```bash
 # Still in transformation/
@@ -144,7 +111,7 @@ python export_data.py
 # This creates JSON files in frontend/public/data/
 ```
 
-### 4. Frontend Development
+### 4. Frontend 
 
 ```bash
 cd frontend
@@ -158,7 +125,7 @@ npm run dev
 # Visit http://localhost:5173
 ```
 
-### 5. Build for Production
+### 5. Deploy on Vercel
 
 ```bash
 # In frontend/
@@ -170,18 +137,18 @@ npm run build
 ## Data Models
 
 ### Staging Layer
-- **stg_bls_wages** - Cleaned and standardized BLS raw data
+- **stg_bls_wages** - Cleaned and standardized BLS raw data - unioned across n years 
 
 ### Intermediate Layer
 - **int_wage_percentiles_by_location** - Calculates 10th, 25th, 50th, 75th, 90th percentiles by occupation + location + year
-- **int_growth_rates** - Year-over-year, 3-year, 5-year, 10-year growth calculations
+- **int_growth_rates** - YoY, 3-year, 5-year, 10-year growth calculations
 - **int_time_series** - Combined percentiles and growth for time series visualizations
 
 ### Marts Layer
 - **dim_occupations** - Occupation dimension table
 - **dim_areas** - Geographic area dimension table
 - **fct_wages** - Core wage fact table
-- **mart_personal_comparison** - Optimized for Personal Wage Comparison Dashboard (7.4M records)
+- **mart_personal_comparison** - Optimized for Personal Wage Comparison analyss
 - **mart_geographic_comparison** - Optimized for geographic comparisons with cost of living adjustments
 
 ## Key Metrics
@@ -226,95 +193,6 @@ npm run build
 
 See [`frontend/DEPLOYMENT.md`](frontend/DEPLOYMENT.md) for detailed deployment instructions.
 
-## Data Updates
-
-To refresh with latest BLS data:
-
-```bash
-# 1. Extract new data
-cd data_extraction
-python get_bls_data.py
-python md_load.py
-
-# 2. Run dbt transformations
-cd ../transformation
-dbt run
-
-# 3. Export to JSON
-python export_data.py
-
-# 4. Rebuild frontend
-cd ../frontend
-npm run build
-
-# 5. Deploy (or git push for auto-deploy)
-```
-
-## Development Workflow
-
-### Adding New dbt Models
-
-1. Create SQL file in appropriate layer (`models/intermediate/` or `models/marts/`)
-2. Add schema documentation in `schema.yml`
-3. Run `dbt run --select your_model`
-4. Add tests in `schema.yml`
-5. Run `dbt test --select your_model`
-
-### Adding Frontend Features
-
-1. Create component in `src/components/`
-2. Define TypeScript interfaces in `src/types.ts`
-3. Import and use in `WageComparison.tsx` or `App.tsx`
-4. Style with Tailwind CSS utility classes
-5. Test with `npm run dev`
-
-## Known Issues & Limitations
-
-### Data Files
-- **Size**: Metropolitan wages file is 358 MB (excluded from git)
-- **Generation required**: Must run `export_data.py` before deployment
-- **No backend API**: All data served as static JSON (fast but large)
-
-### Frontend
-- **Bundle size**: 537 KB (Recharts adds significant weight)
-- **Metro area limit**: Only first 50 metros shown in dropdown
-- **No caching**: JSON files fetched on every comparison
-- **Static data**: No real-time updates (requires data pipeline re-run)
-
-### Cost of Living Data
-- **Placeholder data**: Current CoL index is sample data for 36 metros
-- **Needs real data**: Should integrate MIT Living Wage Calculator or C2ER data
-- **Limited coverage**: Not all metro areas have CoL data
-
-## Future Enhancements
-
-### Phase 2: Geographic Wage Explorer
-- Interactive map visualization
-- Side-by-side city comparisons
-- Cost of living-adjusted rankings
-- Migration value calculator
-
-### Phase 3: Career Path Explorer
-- Related occupation suggestions
-- Career progression paths
-- Skill gap analysis
-- Education ROI calculator
-
-### Phase 4: Salary Projections
-- ML-based wage forecasting
-- Industry trend analysis
-- Personalized salary trajectories
-- Negotiation assistant with market context
-
-## Contributing
-
-Contributions welcome! Areas for improvement:
-- Real cost of living data integration
-- Performance optimization (code splitting, data compression)
-- Additional visualizations (D3.js custom charts)
-- Backend API for dynamic data
-- User authentication and saved comparisons
-- Export reports (PDF, CSV)
 
 ## Data Source
 
@@ -323,21 +201,3 @@ Bureau of Labor Statistics (BLS)
 - **Coverage**: 2014-2023
 - **Update frequency**: Annual
 - **Documentation**: https://www.bls.gov/oes/
-
-## License
-
-- **Application code**: MIT License
-- **BLS data**: Public Domain (U.S. Government)
-
-## Acknowledgments
-
-- Bureau of Labor Statistics for comprehensive wage data
-- dbt Labs for transformation framework
-- Recharts for visualization library
-- MotherDuck for cloud DuckDB hosting
-
-
----
-
-**Built with**: Python, dbt, DuckDB, React, TypeScript, Tailwind CSS
-**Data**: Bureau of Labor Statistics Modeled Wage Estimates (2014-2023)
